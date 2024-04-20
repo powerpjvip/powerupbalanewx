@@ -235,7 +235,7 @@ async def main():
         BotCommands.HelpCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
     bot.add_handler(MessageHandler(stats, filters=command(
         BotCommands.StatsCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
-    LOGGER.info(f"WZML-X Bot [@{bot_name}] Started!")
+    LOGGER.info(f"Bot [@{bot_name}] Started!")
     signal(SIGINT, exit_clean_up)
 
 bot.loop.run_until_complete(main())
