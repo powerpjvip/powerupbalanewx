@@ -222,13 +222,18 @@ user = ''
 USER_SESSION_STRING = environ.get('USER_SESSION_STRING', '')
 if len(USER_SESSION_STRING) != 0:
     log_info("Creating client from USER_SESSION_STRING")
-    try:
-        user = tgClient('user', TELEGRAM_API, TELEGRAM_HASH, session_string=USER_SESSION_STRING,
-                        parse_mode=enums.ParseMode.HTML, no_updates=True).start()
-        IS_PREMIUM_USER = user.me.is_premium
-    except Exception as e:
-        log_error(f"Failed making client from USER_SESSION_STRING : {e}")
-        user = ''
+    user = tgClient(
+        "user",
+        TELEGRAM_API,
+        TELEGRAM_HASH,
+        session_string=USER_SESSION_STRING,
+        parse_mode=enums.ParseMode.HTML,
+        max_concurrent_transmissions=10,
+    ).start()
+    IS_PREMIUM_USER = user.me.is_premium
+else:
+    IS_PREMIUM_USER = False
+    user = ""
 
 MEGA_EMAIL = environ.get('MEGA_EMAIL', '')
 MEGA_PASSWORD = environ.get('MEGA_PASSWORD', '')
@@ -804,19 +809,10 @@ Popen(f"gunicorn web.wserver:app --bind 0.0.0.0:{PORT} --worker-class gevent", s
 bot_cache['pkgs'] = ['zetra', 'xon-bit', 'ggrof', 'cross-suck', 'zetra|xon-bit|ggrof|cross-suck']
 
 srun([bot_cache['pkgs'][1], "-d", f"--profile={getcwd()}"])
-if not ospath.exists('.netrc'):
-    with open('.netrc', 'w'):
+if not ospath.exists(".netrc"):
+    with open(".netrc", "w"):
         pass
-srun(["chmod", "600", ".netrc"])
-srun(["cp", ".netrc", "/root/.netrc"])
-trackers = check_output("curl -Ns https://raw.githubusercontent.com/XIU2/TrackersListCollection/master/all.txt https://ngosang.github.io/trackerslist/trackers_all_http.txt https://newtrackon.com/api/all https://raw.githubusercontent.com/hezhijie0327/Trackerslist/main/trackerslist_tracker.txt | awk '$0' | tr '\n\n' ','", shell=True).decode('utf-8').rstrip(',')
-with open("a2c.conf", "a+") as a:
-    if TORRENT_TIMEOUT:
-        a.write(f"bt-stop-timeout={TORRENT_TIMEOUT}\n")
-    a.write(f"bt-tracker=[{trackers}]")
-srun([bot_cache['pkgs'][0], "--conf-path=/usr/src/app/a2c.conf"])
-alive = Popen(["python3", "alive.py"])
-sleep(0.5)
+srun("chmod 600 .netrc && cp .netrc /root/.netrc && chmod +x aria-nox.sh && ./aria-nox.sh",shell=True,)
 if ospath.exists('accounts.zip'):
     if ospath.exists('accounts'):
         srun(["rm", "-rf", "accounts"])
@@ -851,9 +847,21 @@ def aria2c_init():
 Thread(target=aria2c_init).start()
 sleep(1.5)
 
-aria2c_global = ['bt-max-open-files', 'download-result', 'keep-unfinished-download-result', 'log', 'log-level',
-                 'max-concurrent-downloads', 'max-download-result', 'max-overall-download-limit', 'save-session',
-                 'max-overall-upload-limit', 'optimize-concurrent-downloads', 'save-cookies', 'server-stat-of']
+aria2c_global = [
+    "bt-max-open-files",
+    "download-result",
+    "keep-unfinished-download-result",
+    "log",
+    "log-level",
+    "max-concurrent-downloads",
+    "max-download-result",
+    "max-overall-download-limit",
+    "save-session",
+    "max-overall-upload-limit",
+    "optimize-concurrent-downloads",
+    "save-cookies",
+    "server-stat-of",
+]
 
 if not aria2_options:
     aria2_options = aria2.client.get_global_option()
