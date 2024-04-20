@@ -527,7 +527,7 @@ async def ytdl(client, message):
 async def ytdlleech(client, message):
     _ytdl(client, message, isLeech=True)
 
-if user_dict.get('allpm', False):
+if config_dict.get('ALLPM', False):
     bot.add_handler(MessageHandler(ytdl, filters=command(BotCommands.YtdlCommand) & private & ~CustomFilters.blacklisted))
     bot.add_handler(MessageHandler(ytdlleech, filters=command(BotCommands.YtdlLeechCommand) & private & ~CustomFilters.blacklisted))
 else:
