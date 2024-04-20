@@ -3,7 +3,7 @@ from aiofiles.os import path as aiopath, remove as aioremove, mkdir
 from telegraph import upload_file
 
 from pyrogram.handlers import MessageHandler, CallbackQueryHandler
-from pyrogram.filters import command, regex
+from pyrogram.filters import command, regex, private
 
 from bot import bot, LOGGER, config_dict, DATABASE_URL
 from bot.helper.telegram_helper.message_utils import sendMessage, editMessage, deleteMessage
@@ -118,7 +118,11 @@ async def pics_callback(_, query):
         if message.reply_to_message:
             await deleteMessage(message.reply_to_message)
 
-
-bot.add_handler(MessageHandler(picture_add, filters=command(BotCommands.AddImageCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
-bot.add_handler(MessageHandler(pictures, filters=command(BotCommands.ImagesCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
-bot.add_handler(CallbackQueryHandler(pics_callback, filters=regex(r'^images')))
+if user_dict.get('allpm', False):
+    bot.add_handler(MessageHandler(picture_add, filters=command(BotCommands.AddImageCommand) & private & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(pictures, filters=command(BotCommands.ImagesCommand) & private & ~CustomFilters.blacklisted))
+    bot.add_handler(CallbackQueryHandler(pics_callback, filters=regex(r'^images')))
+else:
+    bot.add_handler(MessageHandler(picture_add, filters=command(BotCommands.AddImageCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(pictures, filters=command(BotCommands.ImagesCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+    bot.add_handler(CallbackQueryHandler(pics_callback, filters=regex(r'^images')))
