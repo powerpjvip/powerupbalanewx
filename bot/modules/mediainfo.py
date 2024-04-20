@@ -6,7 +6,7 @@ from aiofiles.os import remove as aioremove, path as aiopath, mkdir
 from os import path as ospath, getcwd
 
 from pyrogram.handlers import MessageHandler 
-from pyrogram.filters import command
+from pyrogram.filters import command, private
 
 from bot import LOGGER, bot, config_dict
 from bot.helper.telegram_helper.filters import CustomFilters
@@ -105,4 +105,8 @@ async def mediainfo(_, message):
     else:
         return await sendMessage(message, help_msg)
 
-bot.add_handler(MessageHandler(mediainfo, filters=command(BotCommands.MediaInfoCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+if user_dict.get('allpm', False):
+    bot.add_handler(MessageHandler(mediainfo, filters=command(BotCommands.MediaInfoCommand) & private & ~CustomFilters.blacklisted))
+else:
+    bot.add_handler(MessageHandler(mediainfo, filters=command(BotCommands.MediaInfoCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+    
