@@ -5,7 +5,7 @@ from urllib.parse import urlparse, parse_qs
 from bot import config_dict
 
 async def auth_topic(_, __, message):
-    for chat in Config.AUTH_CHATS:
+    for chat in config_dict['AUTH_CHATS']:
         if ':' in chat:
             chat_id, topic_id = chat.split(':')
             if (int(chat_id) == message.chat.id 
@@ -28,9 +28,9 @@ def get_gdriveid(link):
 
 def get_dl(link):
     try:
-        return rget(f"{Config.DIRECT_INDEX}/generate.aspx?id={get_gdriveid(link)}").json()["link"]
+        return rget(f"{config_dict['DIRECT_INDEX']}/generate.aspx?id={get_gdriveid(link)}").json()["link"]
     except:
-        return f"{Config.DIRECT_INDEX}/direct.aspx?id={get_gdriveid(link)}"
+        return f"{config_dict['DIRECT_INDEX']}/direct.aspx?id={get_gdriveid(link)}"
 
 def convert_time(seconds):
     mseconds = seconds * 1000
