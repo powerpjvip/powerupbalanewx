@@ -1,5 +1,5 @@
 from pyrogram.handlers import MessageHandler, CallbackQueryHandler
-from pyrogram.filters import command, regex
+from pyrogram.filters import command, regex, private
 from aiohttp import ClientSession
 from html import escape
 from urllib.parse import quote
@@ -278,8 +278,10 @@ async def torrentSearchUpdate(_, query):
         await query.answer()
         await editMessage(message, "Search has been canceled!")
 
-
-bot.add_handler(MessageHandler(torrentSearch, filters=command(
-    BotCommands.SearchCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
-bot.add_handler(CallbackQueryHandler(
-    torrentSearchUpdate, filters=regex("^torser")))
+if user_dict.get('allpm', False):
+    bot.add_handler(MessageHandler(torrentSearch, filters=command(BotCommands.SearchCommand) & private & ~CustomFilters.blacklisted))
+    bot.add_handler(CallbackQueryHandler(torrentSearchUpdate, filters=regex("^torser")))
+else:
+    bot.add_handler(MessageHandler(torrentSearch, filters=command(BotCommands.SearchCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+    bot.add_handler(CallbackQueryHandler(torrentSearchUpdate, filters=regex("^torser")))
+    
