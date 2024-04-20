@@ -15,9 +15,9 @@ from lxml import etree
 from requests import Session, get as rget
 from aiohttp import ClientSession
 
-from FZBypass import Config, LOGGER
-from FZBypass.core.exceptions import DDLException
-from FZBypass.core.recaptcha import recaptchaV3
+from bot import config_dict, LOGGER
+from bot.core.exceptions import DDLException
+from bot.core.recaptcha import recaptchaV3
 
 
 async def get_readable_time(seconds):
