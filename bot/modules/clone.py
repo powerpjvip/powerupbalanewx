@@ -1,5 +1,5 @@
 from pyrogram.handlers import MessageHandler
-from pyrogram.filters import command
+from pyrogram.filters import command, private
 from secrets import token_hex
 from asyncio import sleep, gather
 from aiofiles.os import path as aiopath
