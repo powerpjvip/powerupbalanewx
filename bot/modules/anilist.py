@@ -13,7 +13,7 @@ from bot.helper.telegram_helper.message_utils import sendMessage, editMessage
 from bot.helper.telegram_helper.button_build import ButtonMaker
 from bot.helper.ext_utils.bot_utils import get_readable_time
 from pyrogram.handlers import MessageHandler, CallbackQueryHandler
-from pyrogram.filters import command, regex
+from pyrogram.filters import command, regex, private
 
 
 GENRES_EMOJI = {"Action": "👊", "Adventure": choice(['🪂', '🧗‍♀']), "Comedy": "🤣", "Drama": " 🎭", "Ecchi": choice(['💋', '🥵']), "Fantasy": choice(['🧞', '🧞‍♂', '🧞‍♀','🌗']), "Hentai": "🔞", "Horror": "☠", "Mahou Shoujo": "☯", "Mecha": "🤖", "Music": "🎸", "Mystery": "🔮", "Psychological": "♟", "Romance": "💞", "Sci-Fi": "🛸", "Slice of Life": choice(['☘','🍁']), "Sports": "⚽️", "Supernatural": "🫧", "Thriller": choice(['🥶', '🔪','🤯'])}
@@ -449,9 +449,17 @@ async def anime_help(_, message):
 • /manga : <i>[search manga]</i>'''
     await sendMessage(message, help_string)
 
-bot.add_handler(MessageHandler(anilist, filters=command(BotCommands.AniListCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
-bot.add_handler(MessageHandler(character, filters=command("character") & CustomFilters.authorized & ~CustomFilters.blacklisted))
-bot.add_handler(MessageHandler(manga, filters=command("manga") & CustomFilters.authorized & ~CustomFilters.blacklisted))
-bot.add_handler(MessageHandler(anime_help, filters=command(BotCommands.AnimeHelpCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
-bot.add_handler(CallbackQueryHandler(setAnimeButtons, filters=regex(r'^anime')))
-bot.add_handler(CallbackQueryHandler(setCharacButtons, filters=regex(r'^cha')))
+if user_dict.get('allpm', False):
+    bot.add_handler(MessageHandler(anilist, filters=command(BotCommands.AniListCommand) & private & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(character, filters=command("character") & private & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(manga, filters=command("manga") & private & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(anime_help, filters=command(BotCommands.AnimeHelpCommand) & private & ~CustomFilters.blacklisted))
+    bot.add_handler(CallbackQueryHandler(setAnimeButtons, filters=regex(r'^anime')))
+    bot.add_handler(CallbackQueryHandler(setCharacButtons, filters=regex(r'^cha')))
+else:
+    bot.add_handler(MessageHandler(anilist, filters=command(BotCommands.AniListCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(character, filters=command("character") & CustomFilters.authorized & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(manga, filters=command("manga") & CustomFilters.authorized & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(anime_help, filters=command(BotCommands.AnimeHelpCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+    bot.add_handler(CallbackQueryHandler(setAnimeButtons, filters=regex(r'^anime')))
+    bot.add_handler(CallbackQueryHandler(setCharacButtons, filters=regex(r'^cha')))
