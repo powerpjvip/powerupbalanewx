@@ -1,6 +1,6 @@
 from contextlib import suppress
 from pyrogram.handlers import MessageHandler, CallbackQueryHandler
-from pyrogram.filters import regex
+from pyrogram.filters import regex, private
 from aiofiles.os import remove as aioremove, path as aiopath
 
 from bot import bot, bot_name, aria2, download_dict, download_dict_lock, OWNER_ID, user_data, LOGGER
@@ -124,7 +124,9 @@ async def get_confirm(client, query):
         await (dl.download()).cancel_download()
         await deleteMessage(message)
 
-
-bot.add_handler(MessageHandler(select, filters=regex(
-    f"^/{BotCommands.BtSelectCommand}(_\w+)?") & CustomFilters.authorized & ~CustomFilters.blacklisted))
-bot.add_handler(CallbackQueryHandler(get_confirm, filters=regex("^btsel")))
+if user_dict.get('allpm', False):
+    bot.add_handler(MessageHandler(select, filters=regex(f"^/{BotCommands.BtSelectCommand}(_\w+)?") & private & ~CustomFilters.blacklisted))
+    bot.add_handler(CallbackQueryHandler(get_confirm, filters=regex("^btsel")))
+else:
+    bot.add_handler(MessageHandler(select, filters=regex(f"^/{BotCommands.BtSelectCommand}(_\w+)?") & CustomFilters.authorized & ~CustomFilters.blacklisted))
+    bot.add_handler(CallbackQueryHandler(get_confirm, filters=regex("^btsel")))
