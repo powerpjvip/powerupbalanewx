@@ -1,5 +1,5 @@
 from pyrogram.handlers import MessageHandler, CallbackQueryHandler
-from pyrogram.filters import command, regex, user
+from pyrogram.filters import command, regex, user, private
 from asyncio import sleep, wait_for, Event, wrap_future
 from aiohttp import ClientSession
 from aiofiles.os import path as aiopath
@@ -527,8 +527,9 @@ async def ytdl(client, message):
 async def ytdlleech(client, message):
     _ytdl(client, message, isLeech=True)
 
-
-bot.add_handler(MessageHandler(ytdl, filters=command(
-    BotCommands.YtdlCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
-bot.add_handler(MessageHandler(ytdlleech, filters=command(
-    BotCommands.YtdlLeechCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+if user_dict.get('allpm', False):
+    bot.add_handler(MessageHandler(ytdl, filters=command(BotCommands.YtdlCommand) & private & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(ytdlleech, filters=command(BotCommands.YtdlLeechCommand) & private & ~CustomFilters.blacklisted))
+else:
+    bot.add_handler(MessageHandler(ytdl, filters=command(BotCommands.YtdlCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(ytdlleech, filters=command(BotCommands.YtdlLeechCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
