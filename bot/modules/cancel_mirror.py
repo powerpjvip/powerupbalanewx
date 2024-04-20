@@ -3,7 +3,7 @@ from asyncio import sleep
 from pyrogram.handlers import MessageHandler, CallbackQueryHandler
 from pyrogram.filters import command, regex, private
 
-from bot import download_dict, bot, bot_name, download_dict_lock, OWNER_ID, user_data
+from bot import download_dict, bot, bot_name, download_dict_lock, OWNER_ID, user_data, config_dict
 from bot.helper.telegram_helper.bot_commands import BotCommands
 from bot.helper.telegram_helper.filters import CustomFilters
 from bot.helper.telegram_helper.message_utils import sendMessage, deleteMessage, auto_delete_message
@@ -90,7 +90,7 @@ async def cancel_all_update(_, query):
         if not res:
             await sendMessage(reply_to, f"No matching tasks for {data[1]}!")
 
-if user_dict.get('allpm', False):
+if config_dict.get('ALLPM', False):
     bot.add_handler(MessageHandler(cancel_mirror, filters=regex(f"^/{BotCommands.CancelMirror}(_\w+)?(?!all)") & private & ~CustomFilters.blacklisted))
     bot.add_handler(MessageHandler(cancell_all_buttons, filters=command(BotCommands.CancelAllCommand) & CustomFilters.sudo))
     bot.add_handler(CallbackQueryHandler(cancel_all_update, filters=regex(r"^canall")))
