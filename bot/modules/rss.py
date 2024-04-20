@@ -653,7 +653,7 @@ def addJob(delay):
 addJob(config_dict['RSS_DELAY'])
 scheduler.start()
 
-if user_dict.get('allpm', False):
+if config_dict.get('ALLPM', False):
     bot.add_handler(MessageHandler(getRssMenu, filters=command(BotCommands.RssCommand) & private & ~CustomFilters.blacklisted))
     bot.add_handler(CallbackQueryHandler(rssListener, filters=regex(r"^rss")))
 else:
