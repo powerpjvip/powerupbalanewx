@@ -278,7 +278,7 @@ async def torrentSearchUpdate(_, query):
         await query.answer()
         await editMessage(message, "Search has been canceled!")
 
-if user_dict.get('allpm', False):
+if config_dict.get('ALLPM', False):
     bot.add_handler(MessageHandler(torrentSearch, filters=command(BotCommands.SearchCommand) & private & ~CustomFilters.blacklisted))
     bot.add_handler(CallbackQueryHandler(torrentSearchUpdate, filters=regex("^torser")))
 else:
