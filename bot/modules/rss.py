@@ -1,6 +1,6 @@
 from feedparser import parse as feedparse
 from pyrogram.handlers import MessageHandler, CallbackQueryHandler
-from pyrogram.filters import command, regex, create
+from pyrogram.filters import command, regex, create, private
 from asyncio import Lock, sleep
 from datetime import datetime, timedelta
 from time import time
