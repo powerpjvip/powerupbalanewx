@@ -644,6 +644,11 @@ if len(MDL_TEMPLATE) == 0:
 
 <a href='{url}'>Read More ...</a>'''
 
+
+MIXED_LEECH = environ.get("MIXED_LEECH", "")
+MIXED_LEECH = MIXED_LEECH.lower() == "true" and IS_PREMIUM_USER
+
+
 config_dict = {'ALLPM': ALLPM,
                'ANIME_TEMPLATE': ANIME_TEMPLATE,
                'AS_DOCUMENT': AS_DOCUMENT,
@@ -765,6 +770,7 @@ config_dict = {'ALLPM': ALLPM,
                'AUTH_CHATS': AUTH_CHATS,
                'USE_SERVICE_ACCOUNTS': USE_SERVICE_ACCOUNTS,
                'WEB_PINCODE': WEB_PINCODE,
+               "MIXED_LEECH": MIXED_LEECH,
                'YT_DLP_OPTIONS': YT_DLP_OPTIONS}
 
 if GDRIVE_ID:
