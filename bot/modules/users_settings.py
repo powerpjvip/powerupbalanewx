@@ -1,6 +1,6 @@
 from datetime import datetime
 from pyrogram.handlers import MessageHandler, CallbackQueryHandler
-from pyrogram.filters import command, regex, create
+from pyrogram.filters import command, regex, create, private
 from aiofiles import open as aiopen
 from aiofiles.os import remove as aioremove, path as aiopath, mkdir
 from langcodes import Language
@@ -727,9 +727,11 @@ async def send_users_settings(client, message):
     else:
         await sendMessage(message, f'{userid} have not saved anything..')
 
-
-bot.add_handler(MessageHandler(send_users_settings, filters=command(
-    BotCommands.UsersCommand) & CustomFilters.sudo))
-bot.add_handler(MessageHandler(user_settings, filters=command(
-    BotCommands.UserSetCommand) & CustomFilters.authorized_uset))
-bot.add_handler(CallbackQueryHandler(edit_user_settings, filters=regex("^userset")))
+if user_dict.get('pm_access', False):
+            bot.add_handler(MessageHandler(send_users_settings, filters=command(BotCommands.UsersCommand) & CustomFilters.sudo))
+            bot.add_handler(MessageHandler(user_settings, filters=command(BotCommands.UserSetCommand) & private))
+            bot.add_handler(CallbackQueryHandler(edit_user_settings, filters=regex("^userset")))
+else:
+            bot.add_handler(MessageHandler(send_users_settings, filters=command(BotCommands.UsersCommand) & CustomFilters.sudo))
+            bot.add_handler(MessageHandler(user_settings, filters=command(BotCommands.UserSetCommand) & CustomFilters.authorized_uset))
+            bot.add_handler(CallbackQueryHandler(edit_user_settings, filters=regex("^userset")))
