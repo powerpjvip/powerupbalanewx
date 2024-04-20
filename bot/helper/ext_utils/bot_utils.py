@@ -369,7 +369,7 @@ def get_mega_link_type(url):
 def arg_parser(items, arg_base):
     if not items:
         return arg_base
-    bool_arg_set = {'-b', '-e', '-z', '-s', '-j', '-d', '-ml'}
+    bool_arg_set = {'-b', '-e', '-z', '-s', '-j', '-d'}
     t = len(items)
     i = 0
     arg_start = -1
@@ -379,7 +379,7 @@ def arg_parser(items, arg_base):
         if part in arg_base:
             if arg_start == -1:
                 arg_start = i
-            if i + 1 == t and part in bool_arg_set or part in ['-s', '-j', "-ml"]:
+            if i + 1 == t and part in bool_arg_set or part in ['-s', '-j']:
                 arg_base[part] = True
             else:
                 sub_list = []
