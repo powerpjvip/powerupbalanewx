@@ -3,7 +3,7 @@ from pyrogram.handlers import MessageHandler, CallbackQueryHandler
 from pyrogram.filters import regex, private
 from aiofiles.os import remove as aioremove, path as aiopath
 
-from bot import bot, bot_name, aria2, download_dict, download_dict_lock, OWNER_ID, user_data, LOGGER
+from bot import bot, bot_name, aria2, download_dict, download_dict_lock, OWNER_ID, user_data, LOGGER, config_dict
 from bot.helper.telegram_helper.bot_commands import BotCommands
 from bot.helper.telegram_helper.filters import CustomFilters
 from bot.helper.telegram_helper.message_utils import sendMessage, sendStatusMessage, deleteMessage
@@ -124,7 +124,7 @@ async def get_confirm(client, query):
         await (dl.download()).cancel_download()
         await deleteMessage(message)
 
-if user_dict.get('allpm', False):
+if config_dict.get('ALLPM', False):
     bot.add_handler(MessageHandler(select, filters=regex(f"^/{BotCommands.BtSelectCommand}(_\w+)?") & private & ~CustomFilters.blacklisted))
     bot.add_handler(CallbackQueryHandler(get_confirm, filters=regex("^btsel")))
 else:
