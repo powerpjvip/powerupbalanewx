@@ -2,7 +2,7 @@ from pyrogram.filters import command, regex, private
 from pyrogram.handlers import CallbackQueryHandler, MessageHandler
 from time import time
 
-from bot import bot, bot_cache, categories_dict, download_dict, download_dict_lock
+from bot import bot, bot_cache, categories_dict, download_dict, download_dict_lock, config_dict
 from bot.helper.ext_utils.bot_utils import MirrorStatus, arg_parser, fetch_user_tds, fetch_user_dumps, getDownloadByGid, is_gdrive_link, new_task, sync_to_async, get_readable_time
 from bot.helper.ext_utils.help_messages import CATEGORY_HELP_MESSAGE
 from bot.helper.mirror_utils.upload_utils.gdriveTools import GoogleDriveHelper
@@ -140,7 +140,7 @@ async def confirm_dump(client, query):
     buttons.ibutton(f'Done ({get_readable_time(60 - (time() - bot_cache[msg_id][3]))})', f'dcat {user_id} {msg_id} ddone', 'footer')
     await editMessage(query.message, f"<b>Select the category where you want to upload</b>\n\n<i><b>Upload Category:</b></i> <code>{cat_name}</code>\n\n<b>Timeout:</b> 60 sec", buttons.build_menu(3))
 
-if user_dict.get('allpm', False):
+if config_dict.get('ALLPM', False):
     bot.add_handler(MessageHandler(change_category, filters=command(BotCommands.CategorySelect) & private))
     bot.add_handler(CallbackQueryHandler(confirm_category, filters=regex("^scat")))
     bot.add_handler(CallbackQueryHandler(confirm_dump, filters=regex("^dcat")))
