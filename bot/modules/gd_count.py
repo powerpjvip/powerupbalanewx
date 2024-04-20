@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from pyrogram.handlers import MessageHandler
-from pyrogram.filters import command
+from pyrogram.filters import command,private
 
 from bot import bot
 from bot.helper.mirror_utils.upload_utils.gdriveTools import GoogleDriveHelper
@@ -42,6 +42,7 @@ async def countNode(_, message):
         msg = 'Send Gdrive link along with command or by replying to the link by command'
     await sendMessage(message, msg, photo='IMAGES')
 
-
-bot.add_handler(MessageHandler(countNode, filters=command(
-    BotCommands.CountCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+if user_dict.get('allpm', False):
+    bot.add_handler(MessageHandler(countNode, filters=command(BotCommands.CountCommand) & private & ~CustomFilters.blacklisted))
+else:
+    bot.add_handler(MessageHandler(countNode, filters=command(BotCommands.CountCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
