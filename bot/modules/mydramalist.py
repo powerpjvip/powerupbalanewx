@@ -150,7 +150,7 @@ async def mdl_callback(_, query):
         await message.delete()
         await message.reply_to_message.delete()
 
-if user_dict.get('allpm', False):
+if config_dict.get('ALLPM', False):
     bot.add_handler(MessageHandler(mydramalist_search, filters=command(BotCommands.MyDramaListCommand) & private & ~CustomFilters.blacklisted))
     bot.add_handler(CallbackQueryHandler(mdl_callback, filters=regex(r'^mdl')))
 else:
