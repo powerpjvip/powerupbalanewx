@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from pyrogram.handlers import MessageHandler
-from pyrogram.filters import command
+from pyrogram.filters import command,private
 
 from bot import bot, LOGGER
 from bot.helper.telegram_helper.message_utils import auto_delete_message, sendMessage
@@ -28,6 +28,7 @@ async def deletefile(_, message):
     reply_message = await sendMessage(message, msg)
     await auto_delete_message(message, reply_message)
 
-
-bot.add_handler(MessageHandler(deletefile, filters=command(
-    BotCommands.DeleteCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+if user_dict.get('allpm', False):
+    bot.add_handler(MessageHandler(deletefile, filters=command(BotCommands.DeleteCommand) & private & ~CustomFilters.blacklisted))
+else:
+    bot.add_handler(MessageHandler(deletefile, filters=command(BotCommands.DeleteCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
