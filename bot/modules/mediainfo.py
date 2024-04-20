@@ -105,7 +105,7 @@ async def mediainfo(_, message):
     else:
         return await sendMessage(message, help_msg)
 
-if user_dict.get('allpm', False):
+if config_dict.get('ALLPM', False):
     bot.add_handler(MessageHandler(mediainfo, filters=command(BotCommands.MediaInfoCommand) & private & ~CustomFilters.blacklisted))
 else:
     bot.add_handler(MessageHandler(mediainfo, filters=command(BotCommands.MediaInfoCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
