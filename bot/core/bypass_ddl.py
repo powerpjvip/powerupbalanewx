@@ -123,7 +123,7 @@ async def terabox(url: str) -> str:
     url = retryme(url).url
     key = url.split('?surl=')[-1]
     url = f'http://www.terabox.com/wap/share/filelist?surl={key}'
-    sess.cookies.update({"ndus": Config.TERA_COOKIE})
+    sess.cookies.update({"ndus": config_dict['TERA_COOKIE']})
 
     res = retryme(url)
     key = res.url.split('?surl=')[-1]
