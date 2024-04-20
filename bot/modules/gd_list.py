@@ -73,7 +73,7 @@ async def drive_list(_, message):
         return
     buttons = await list_buttons(user_id)
     await sendMessage(message, '<b>Choose drive list options:</b>', buttons, 'IMAGES')
-if user_dict.get('allpm', False):
+if config_dict.get('ALLPM', False):
     bot.add_handler(MessageHandler(drive_list, filters=command(BotCommands.ListCommand) & private & ~CustomFilters.blacklisted))
     bot.add_handler(CallbackQueryHandler(select_type, filters=regex("^list_types")))
 else:
