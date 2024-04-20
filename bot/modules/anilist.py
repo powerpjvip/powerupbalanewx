@@ -449,7 +449,7 @@ async def anime_help(_, message):
 • /manga : <i>[search manga]</i>'''
     await sendMessage(message, help_string)
 
-if user_dict.get('allpm', False):
+if config_dict.get('ALLPM', False):
     bot.add_handler(MessageHandler(anilist, filters=command(BotCommands.AniListCommand) & private & ~CustomFilters.blacklisted))
     bot.add_handler(MessageHandler(character, filters=command("character") & private & ~CustomFilters.blacklisted))
     bot.add_handler(MessageHandler(manga, filters=command("manga") & private & ~CustomFilters.blacklisted))
