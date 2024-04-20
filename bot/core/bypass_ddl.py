@@ -36,7 +36,7 @@ async def uptobox(url):
 
     try:
         file_id = findall(r'\bhttps?://.*uptobox\.com/(\w+)', url)[0]
-        if UPTOBOX_TOKEN := Config.UPTOBOX_TOKEN:
+        if UPTOBOX_TOKEN := config_dict['UPTOBOX_TOKEN']:
             file_link = f'https://uptobox.com/api/link?token={UPTOBOX_TOKEN}&file_code={file_id}'
         else:
             file_link = f'https://uptobox.com/api/link?file_code={file_id}'
