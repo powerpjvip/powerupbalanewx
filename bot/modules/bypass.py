@@ -144,9 +144,7 @@ async def inline_query(client, query):
         )
     except QueryIdInvalid:
         pass
-
-
-if user_dict.get('allpm', False):   
+if config_dict.get('ALLPM', False): 
     bot.add_handler(MessageHandler(bypass_check, filters=command(BotCommands.BypassCommand) & private & ~CustomFilters.blacklisted))
 else:
     bot.add_handler(MessageHandler(bypass_check, filters=command(BotCommands.BypassCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
