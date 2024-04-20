@@ -139,7 +139,7 @@ class WZMLStyle:
     # async def onUploadComplete(): ---> tasks_listener.py
     NAME =                  '<b><pre>{Name}</pre></b>\n┃\n'
     SIZE =                  '**┝**<b>**Size:** </b>{Size}\n'
-    ELAPSE =                '**┝**<b>**Elapsed:** </b>{Time}\n'
+    ELAPSE =                '\n**┝**<b>**Elapsed:** </b>{Time}\n'
     MODE =                  '**┝**<b>**Mode:** </b>{Mode}\n'
 
     # ----- LEECH -------
@@ -182,11 +182,11 @@ class WZMLStyle:
     STATUS =            '\n**┝**<b>**Status:**</b> <a href="{Url}">{Status}</a>'
     ETA =                                                ' | <b>**ETA:**</b> {Eta}'
     SPEED =             '\n**┝**<b>**Speed:**</b> {Speed}'
-    ELAPSED =                                     ' | <b>**Elapsed:**</b> {Elapsed}'
+    ELAPSED =           '\n**┝**<b>**Elapsed:**</b> {Elapsed}'
     ENGINE =            '\n**┝**<b>**Engine:**</b> {Engine}'
     STA_MODE =          '\n**┝**<b>**Mode:**</b> {Mode}'
     SEEDERS =           '\n**┝**<b>**Seeders:**</b> {Seeders} | '
-    LEECHERS =                                           '<b>**Leechers:**</b> {Leechers}'
+    LEECHERS =          '\n**┝**<b>**Leechers:**</b> {Leechers}'
 
     ####--------SEEDING----------
     SEED_SIZE =      '\n**┝**<b>**Size:** </b>{Size}'
