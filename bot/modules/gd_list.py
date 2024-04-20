@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from random import choice
 from pyrogram.handlers import MessageHandler, CallbackQueryHandler
-from pyrogram.filters import command, regex
+from pyrogram.filters import command, regex, private
 
 from bot import LOGGER, bot, config_dict
 from bot.helper.mirror_utils.upload_utils.gdriveTools import GoogleDriveHelper
@@ -73,7 +73,9 @@ async def drive_list(_, message):
         return
     buttons = await list_buttons(user_id)
     await sendMessage(message, '<b>Choose drive list options:</b>', buttons, 'IMAGES')
-
-bot.add_handler(MessageHandler(drive_list, filters=command(
-    BotCommands.ListCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
-bot.add_handler(CallbackQueryHandler(select_type, filters=regex("^list_types")))
+if user_dict.get('allpm', False):
+    bot.add_handler(MessageHandler(drive_list, filters=command(BotCommands.ListCommand) & private & ~CustomFilters.blacklisted))
+    bot.add_handler(CallbackQueryHandler(select_type, filters=regex("^list_types")))
+else:
+    bot.add_handler(MessageHandler(drive_list, filters=command(BotCommands.ListCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+    bot.add_handler(CallbackQueryHandler(select_type, filters=regex("^list_types")))
