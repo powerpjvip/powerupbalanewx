@@ -1,5 +1,5 @@
 from pyrogram.handlers import MessageHandler, CallbackQueryHandler
-from pyrogram.filters import command, regex
+from pyrogram.filters import command, regex, private
 from html import escape
 from traceback import format_exc
 from base64 import b64encode
@@ -481,12 +481,15 @@ async def qb_leech(client, message):
     _mirror_leech(client, message, isQbit=True, isLeech=True)
 
 
-bot.add_handler(MessageHandler(mirror, filters=command(
-    BotCommands.MirrorCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
-bot.add_handler(MessageHandler(qb_mirror, filters=command(
-    BotCommands.QbMirrorCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
-bot.add_handler(MessageHandler(leech, filters=command(
-    BotCommands.LeechCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
-bot.add_handler(MessageHandler(qb_leech, filters=command(
-    BotCommands.QbLeechCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
-bot.add_handler(CallbackQueryHandler(wzmlxcb, filters=regex(r'^wzmlx')))
+if user_dict.get('allpm', False):
+    bot.add_handler(MessageHandler(mirror, filters=command(BotCommands.MirrorCommand) & private & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(qb_mirror, filters=command(BotCommands.QbMirrorCommand) & private & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(leech, filters=command(BotCommands.LeechCommand) & private & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(qb_leech, filters=command(BotCommands.QbLeechCommand) & private & ~CustomFilters.blacklisted))
+    bot.add_handler(CallbackQueryHandler(wzmlxcb, filters=regex(r'^wzmlx')))
+else:
+    bot.add_handler(MessageHandler(mirror, filters=command(BotCommands.MirrorCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(qb_mirror, filters=command(BotCommands.QbMirrorCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(leech, filters=command(BotCommands.LeechCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(qb_leech, filters=command(BotCommands.QbLeechCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+    bot.add_handler(CallbackQueryHandler(wzmlxcb, filters=regex(r'^wzmlx')))
