@@ -61,7 +61,7 @@ async def filepress(url: str):
 ⇢<b>FilePress:</b> <a href="{url}">Click Here</a>
 ⇢<b>Telegram:</b> {tg_link_text}
 '''
-    if "drive.google.com" in dl_link and Config.DIRECT_INDEX:
+    if "drive.google.com" in dl_link and config_dict['DIRECT_INDEX']:
         parse_txt += f"┠<b>Temp Index:</b> <a href='{get_dl(dl_link)}'>Click Here</a>\n"
     parse_txt += f"┗<b>GDrive:</b> <a href='{dl_link}'>Click Here</a>"
     return parse_txt
@@ -77,8 +77,8 @@ async def gdtot(url):
         raise DDLException(f'{e.__class__.__name__}')
     if (drive_link := findall(r"myDl\('(.*?)'\)", res.text)) and "drive.google.com" in drive_link[0]:
         d_link = drive_link[0]
-    elif Config.GDTOT_CRYPT:
-        cget('GET', url, cookies={'crypt': Config.GDTOT_CRYPT})
+    elif config_dict['GDTOT_CRYPT']:
+        cget('GET', url, cookies={'crypt': config_dict['GDTOT_CRYPT']})
         p_url = urlparse(url)
         js_script = cget('POST', f"{p_url.scheme}://{p_url.hostname}/dld", data={'dwnld': url.split('/')[-1]})
         g_id = findall('gd=(.*?)&', js_script.text)
@@ -95,7 +95,7 @@ async def gdtot(url):
 ⇢<b>Size:</b> <code>{parse_data[-1]}</code>
 ⇢<b>GDToT:</b> <a href="{url}">Click Here</a>
 '''
-    if Config.DIRECT_INDEX:
+    if config_dict['DIRECT_INDEX']:
         parse_txt += f"⇢<b>Temp Index:</b> <a href='{get_dl(d_link)}'>Click Here</a>\n"
     parse_txt += f"⇢<b>GDrive:</b> <a href='{d_link}'>Click Here</a>"
     return parse_txt 
@@ -135,7 +135,7 @@ async def drivescript(url, crypt, dtype):
 ⇢<b>{dtype}:</b> <a href="{url}">Click Here</a>'''
         if dtype == "HubDrive":
             parse_txt += f'''\n⇢<b>Instant:</b> <a href="{gd_data[1]['href']}">Click Here</a>'''
-        if (d_link := gd_data[0]['href']) and Config.DIRECT_INDEX:
+        if (d_link := gd_data[0]['href']) and config_dict['DIRECT_INDEX']:
             parse_txt += f"\n⇢<b>Temp Index:</b> <a href='{get_dl(d_link)}'>Click Here</a>"
         parse_txt += f"\n⇢<b>GDrive:</b> <a href='{d_link}'>Click Here</a>"
         return parse_txt
@@ -164,7 +164,7 @@ async def appflix(url):
 ⇢<b>Source:</b> <code>{url}</code>'''
         if dbotv2:
             parse_txt += f"\n⇢<b>DriveBot V2:</b> <a href='{dbotv2}'>Click Here</a>"
-        if d_link and Config.DIRECT_INDEX:
+        if d_link and config_dict['DIRECT_INDEX']:
             parse_txt += f"\n⇢<b>Temp Index:</b> <a href='{get_dl(d_link)}'>Click Here</a>"
         parse_txt += f"\n⇢<b>GDrive:</b> <a href='{d_link}'>Click Here</a>"
         return parse_txt
@@ -187,12 +187,12 @@ async def appflix(url):
 
 
 async def sharerpw(url: str, force=False):
-    if not Config.XSRF_TOKEN and not Config.LARAVEL_SESSION:
+    if not config_dict['XSRF_TOKEN'] and not config_dict['LARAVEL_SESSION']:
         raise DDLException("XSRF_TOKEN or LARAVEL_SESSION not Provided!")
     cget = create_scraper(allow_brotli=False).request
     resp = cget("GET", url, cookies={
-        "XSRF-TOKEN": Config.XSRF_TOKEN,
-        "laravel_session": Config.LARAVEL_SESSION
+        "XSRF-TOKEN": config_dict['XSRF_TOKEN'],
+        "laravel_session": config_dict['LARAVEL_SESSION']
     })
     parse_txt = findall(">(.*?)<\/td>", resp.text)
     ddl_btn = etree.HTML(resp.content).xpath("//button[@id='btndirect']")
