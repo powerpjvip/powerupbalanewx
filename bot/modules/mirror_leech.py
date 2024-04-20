@@ -481,7 +481,7 @@ async def qb_leech(client, message):
     _mirror_leech(client, message, isQbit=True, isLeech=True)
 
 
-if user_dict.get('allpm', False):
+if config_dict.get('ALLPM', False):
     bot.add_handler(MessageHandler(mirror, filters=command(BotCommands.MirrorCommand) & private & ~CustomFilters.blacklisted))
     bot.add_handler(MessageHandler(qb_mirror, filters=command(BotCommands.QbMirrorCommand) & private & ~CustomFilters.blacklisted))
     bot.add_handler(MessageHandler(leech, filters=command(BotCommands.LeechCommand) & private & ~CustomFilters.blacklisted))
