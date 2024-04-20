@@ -233,7 +233,7 @@ async def imdb_callback(_, query):
         await query.message.delete()
         await query.message.reply_to_message.delete()
 
-if user_dict.get('allpm', False):
+if config_dict.get('ALLPM', False):
     bot.add_handler(MessageHandler(imdb_search, filters=command(BotCommands.IMDBCommand) & private & ~CustomFilters.blacklisted))
     bot.add_handler(CallbackQueryHandler(imdb_callback, filters=regex(r'^imdb')))
 else:
