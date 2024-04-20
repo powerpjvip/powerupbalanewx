@@ -286,7 +286,7 @@ async def clone(client, message):
         await gdcloneNode(message, link, [tag, drive_id, index_link])
     await delete_links(message)
 
-if user_dict.get('allpm', False):
+if config_dict.get('ALLPM', False):
     bot.add_handler(MessageHandler(clone, filters=command(BotCommands.CloneCommand) & private & ~CustomFilters.blacklisted))
 else:
     bot.add_handler(MessageHandler(clone, filters=command(BotCommands.CloneCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
