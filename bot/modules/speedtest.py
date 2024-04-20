@@ -2,7 +2,7 @@ from speedtest import Speedtest, ConfigRetrievalError
 from pyrogram.handlers import MessageHandler
 from pyrogram.filters import command, private
 
-from bot import bot, LOGGER
+from bot import bot, LOGGER, config_dict
 from bot.helper.telegram_helper.filters import CustomFilters
 from bot.helper.telegram_helper.bot_commands import BotCommands
 from bot.helper.telegram_helper.message_utils import sendMessage, deleteMessage, editMessage
@@ -53,7 +53,7 @@ async def speedtest(_, message):
     except Exception as e:
         LOGGER.error(str(e))
         await editMessage(speed, string_speed)
-if user_dict.get('allpm', False):
+if config_dict.get('ALLPM', False):
     bot.add_handler(MessageHandler(speedtest, filters=command(BotCommands.SpeedCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
 else:
     bot.add_handler(MessageHandler(speedtest, filters=command(BotCommands.SpeedCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
