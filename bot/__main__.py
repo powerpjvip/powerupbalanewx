@@ -218,23 +218,22 @@ async def restart_notification():
 async def main():
     await gather(start_cleanup(), torrent_search.initiate_search_tools(), restart_notification(), search_images(), set_commands(bot))
     await sync_to_async(start_aria2_listener, wait=False)
-    
-    bot.add_handler(MessageHandler(
-        start, filters=command(BotCommands.StartCommand) & private))
-    bot.add_handler(CallbackQueryHandler(
-        token_callback, filters=regex(r'^pass')))
-    bot.add_handler(MessageHandler(
-        login, filters=command(BotCommands.LoginCommand) & private))
-    bot.add_handler(MessageHandler(log, filters=command(
-        BotCommands.LogCommand) & CustomFilters.sudo))
-    bot.add_handler(MessageHandler(restart, filters=command(
-        BotCommands.RestartCommand) & CustomFilters.sudo))
-    bot.add_handler(MessageHandler(ping, filters=command(
-        BotCommands.PingCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
-    bot.add_handler(MessageHandler(bot_help, filters=command(
-        BotCommands.HelpCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
-    bot.add_handler(MessageHandler(stats, filters=command(
-        BotCommands.StatsCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+
+
+    if config_dict.get('ALLPM', False):
+        authorized_filter = private
+    else:
+        authorized_filter = CustomFilters.authorized & ~CustomFilters.blacklisted
+
+    bot.add_handler(MessageHandler(start, filters=command(BotCommands.StartCommand) & private))
+    bot.add_handler(CallbackQueryHandler(token_callback, filters=regex(r'^pass')))
+    bot.add_handler(MessageHandler(login, filters=command(BotCommands.LoginCommand) & private))
+    bot.add_handler(MessageHandler(log, filters=command(BotCommands.LogCommand) & CustomFilters.sudo))
+    bot.add_handler(MessageHandler(restart, filters=command(BotCommands.RestartCommand) & CustomFilters.sudo))
+    bot.add_handler(MessageHandler(ping, filters=command(BotCommands.PingCommand) & authorized_filter & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(bot_help, filters=command(BotCommands.HelpCommand) & authorized_filter & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(stats, filters=command(BotCommands.StatsCommand) & authorized_filter & ~CustomFilters.blacklisted))
+      
     LOGGER.info(f"Bot [@{bot_name}] Started!")
     signal(SIGINT, exit_clean_up)
 
