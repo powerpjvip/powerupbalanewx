@@ -414,6 +414,9 @@ WEB_PINCODE = WEB_PINCODE.lower() == 'true'
 AS_DOCUMENT = environ.get('AS_DOCUMENT', '')
 AS_DOCUMENT = AS_DOCUMENT.lower() == 'true'
 
+ALLPM = environ.get('ALLPM', '')
+ALLPM = ALLPM.lower() == 'false'
+
 USER_TD_MODE = environ.get('USER_TD_MODE', '')
 USER_TD_MODE = USER_TD_MODE.lower() == 'true'
 
@@ -641,7 +644,8 @@ if len(MDL_TEMPLATE) == 0:
 
 <a href='{url}'>Read More ...</a>'''
 
-config_dict = {'ANIME_TEMPLATE': ANIME_TEMPLATE,
+config_dict = {'ALLPM': ALLPM,
+               'ANIME_TEMPLATE': ANIME_TEMPLATE,
                'AS_DOCUMENT': AS_DOCUMENT,
                'AUTHORIZED_CHATS': AUTHORIZED_CHATS,
                'AUTO_DELETE_MESSAGE_DURATION': AUTO_DELETE_MESSAGE_DURATION,
