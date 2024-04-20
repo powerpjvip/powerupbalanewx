@@ -4,7 +4,7 @@ from requests import get as rget
 from urllib.parse import quote as q
 from pycountry import countries as conn
 
-from pyrogram.filters import command, regex
+from pyrogram.filters import command, regex, private
 from pyrogram.handlers import MessageHandler, CallbackQueryHandler
 from pyrogram.errors import MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty, ReplyMarkupInvalid
 
@@ -150,5 +150,10 @@ async def mdl_callback(_, query):
         await message.delete()
         await message.reply_to_message.delete()
 
-bot.add_handler(MessageHandler(mydramalist_search, filters=command(BotCommands.MyDramaListCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
-bot.add_handler(CallbackQueryHandler(mdl_callback, filters=regex(r'^mdl')))
+if user_dict.get('allpm', False):
+    bot.add_handler(MessageHandler(mydramalist_search, filters=command(BotCommands.MyDramaListCommand) & private & ~CustomFilters.blacklisted))
+    bot.add_handler(CallbackQueryHandler(mdl_callback, filters=regex(r'^mdl')))
+else:
+    bot.add_handler(MessageHandler(mydramalist_search, filters=command(BotCommands.MyDramaListCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+    bot.add_handler(CallbackQueryHandler(mdl_callback, filters=regex(r'^mdl')))
+    
