@@ -4,7 +4,7 @@ from imdb import Cinemagoer
 from pycountry import countries as conn
 
 from pyrogram.handlers import MessageHandler, CallbackQueryHandler
-from pyrogram.filters import command, regex
+from pyrogram.filters import command, regex, private
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram.errors import MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 
@@ -233,6 +233,9 @@ async def imdb_callback(_, query):
         await query.message.delete()
         await query.message.reply_to_message.delete()
 
-
-bot.add_handler(MessageHandler(imdb_search, filters=command(BotCommands.IMDBCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
-bot.add_handler(CallbackQueryHandler(imdb_callback, filters=regex(r'^imdb')))
+if user_dict.get('allpm', False):
+    bot.add_handler(MessageHandler(imdb_search, filters=command(BotCommands.IMDBCommand) & private & ~CustomFilters.blacklisted))
+    bot.add_handler(CallbackQueryHandler(imdb_callback, filters=regex(r'^imdb')))
+else:
+    bot.add_handler(MessageHandler(imdb_search, filters=command(BotCommands.IMDBCommand) & CustomFilters.authorized & ~CustomFilters.blacklisted))
+    bot.add_handler(CallbackQueryHandler(imdb_callback, filters=regex(r'^imdb')))
