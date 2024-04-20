@@ -90,9 +90,11 @@ async def cancel_all_update(_, query):
         if not res:
             await sendMessage(reply_to, f"No matching tasks for {data[1]}!")
 
-
-bot.add_handler(MessageHandler(cancel_mirror, filters=regex(
-    f"^/{BotCommands.CancelMirror}(_\w+)?(?!all)") & CustomFilters.authorized & ~CustomFilters.blacklisted))
-bot.add_handler(MessageHandler(cancell_all_buttons, filters=command(
-    BotCommands.CancelAllCommand) & CustomFilters.sudo))
-bot.add_handler(CallbackQueryHandler(cancel_all_update, filters=regex(r"^canall")))
+if user_dict.get('allpm', False):
+    bot.add_handler(MessageHandler(cancel_mirror, filters=regex(f"^/{BotCommands.CancelMirror}(_\w+)?(?!all)") & private & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(cancell_all_buttons, filters=command(BotCommands.CancelAllCommand) & CustomFilters.sudo))
+    bot.add_handler(CallbackQueryHandler(cancel_all_update, filters=regex(r"^canall")))
+else:
+    bot.add_handler(MessageHandler(cancel_mirror, filters=regex(f"^/{BotCommands.CancelMirror}(_\w+)?(?!all)") & CustomFilters.authorized & ~CustomFilters.blacklisted))
+    bot.add_handler(MessageHandler(cancell_all_buttons, filters=command(BotCommands.CancelAllCommand) & CustomFilters.sudo))
+    bot.add_handler(CallbackQueryHandler(cancel_all_update, filters=regex(r"^canall")))
