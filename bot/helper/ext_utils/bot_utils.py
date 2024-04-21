@@ -251,7 +251,7 @@ def get_readable_message():
         elapsed = time() - download.message.date.timestamp()
         msg += BotTheme('STATUS_NAME', Name="Task is being Processed!" if config_dict['SAFE_MODE'] and elapsed >= config_dict['STATUS_UPDATE_INTERVAL'] else escape(f'{download.name()}'))
         if download.status() not in [MirrorStatus.STATUS_SPLITTING, MirrorStatus.STATUS_SEEDING]:
-            msg += BotTheme('STATUS', Status=download.status(), source=self.source_msg)
+            msg += BotTheme('STATUS', Status=download.status(), source=msg_link)
             msg += BotTheme('BAR', Bar=f"{get_progress_bar_string(download.progress())}")
             meg += BotTheme('PREC', Pre=f"{download.progress()}")
             msg += BotTheme('PROCESSED', Processed=f"{download.processed_bytes()}")
