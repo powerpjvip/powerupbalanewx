@@ -178,10 +178,10 @@ class WZMLStyle:
 
     #####---------PROGRESSIVE STATUS-------
     BAR =               '\n┝[{Bar}]'
-    PREC =              '\n┝<b>Total: </b> {Pre}
+    PREC =              '\n┝<b>Total: </b> {Pre}'
     PROCESSED =         '\n┝<b>Processed:</b> {Processed}'
-    TOTAL_SIZE =        '\n┝<b>Total :</b> {Total_s}
-    STATUS =            '\n┝<a href="{msg_link}">{Status}</a>'
+    TOTAL_SIZE =        '\n┝<b>Total :</b> {Total_s}'
+    STATUS =            '\n┝<a href="{source}">{Status}</a>'
     ETA =               '\n┝<b>ETA:</b> {Eta}'
     SPEED =             '\n┝<b>Speed:</b> {Speed}'
     ELAPSED =           '\n┝<b>Elapsed:</b> {Elapsed}'
