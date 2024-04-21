@@ -43,6 +43,42 @@ PAGES        = 1
 PAGE_NO      = 1
 
 
+
+class SourcePath:
+    def __init__(self, source_url=None, message=None):
+        self.source_url = (source_url if source_url and source_url.startswith('http') else 
+                           f"https://t.me/share/url?url={source_url}" if source_url else 
+                           message.link if message and hasattr(message, 'link') else None)
+        self.message = message
+        self.source_msg = None
+        if self.source_url:
+            self.__parse_source()
+
+    def __parse_source(self):
+        if self.source_url == self.message.link:
+            file = self.message.reply_to_message
+            if file:
+                self.source_url = file.link
+        elif self.source_url.startswith('https://t.me/share/url?url='):
+            msg = self.source_url.replace('https://t.me/share/url?url=', '')
+            if msg.startswith('magnet'):
+                mag = unquote(msg).split('&')
+                trac_count, name, amper = 0, '', False
+                for check in mag:
+                    if check.startswith('tr='):
+                        trac_count += 1
+                    elif check.startswith('magnet:?xt=urn:btih:'):
+                        hashh = check.replace('magnet:?xt=urn:btih:', '')
+                self.source_msg = f"<code>{msg}</code>"
+            else:
+                self.source_msg = f"<code>{self.source_url}</code>"
+
+
+
+
+
+
+
 class MirrorStatus:
     STATUS_UPLOADING   = "Upload"
     STATUS_DOWNLOADING = "Download"
@@ -215,9 +251,11 @@ def get_readable_message():
         elapsed = time() - download.message.date.timestamp()
         msg += BotTheme('STATUS_NAME', Name="Task is being Processed!" if config_dict['SAFE_MODE'] and elapsed >= config_dict['STATUS_UPDATE_INTERVAL'] else escape(f'{download.name()}'))
         if download.status() not in [MirrorStatus.STATUS_SPLITTING, MirrorStatus.STATUS_SEEDING]:
-            msg += BotTheme('STATUS', Status=download.status(), Url=msg_link)
-            msg += BotTheme('BAR', Bar=f"{get_progress_bar_string(download.progress())} {download.progress()}")
-            msg += BotTheme('PROCESSED', Processed=f"{download.processed_bytes()} of {download.size()}")
+            msg += BotTheme('STATUS', Status=download.status(), source=self.source_msg)
+            msg += BotTheme('BAR', Bar=f"{get_progress_bar_string(download.progress())}")
+            meg += BotTheme('PREC', Pre=f"{download.progress()}")
+            msg += BotTheme('PROCESSED', Processed=f"{download.processed_bytes()}")
+            msg += BotTheme('TOTAL_SIZE', Total_s=f"{download.size()}")
             msg += BotTheme('ETA', Eta=download.eta())
             msg += BotTheme('SPEED', Speed=download.speed())
             msg += BotTheme('ELAPSED', Elapsed=get_readable_time(elapsed))
