@@ -425,7 +425,6 @@ class MirrorLeechListener:
         msg += BotTheme('SIZE', Size=get_readable_file_size(size))
         msg += BotTheme('ELAPSE', Time=get_readable_time(time() - self.message.date.timestamp()))
         msg += BotTheme('MODE', Mode=self.upload_details['mode'])
-        msg += BotTheme('LINE')
         LOGGER.info(f'Task Done: {name}')
         
         buttons = ButtonMaker()
